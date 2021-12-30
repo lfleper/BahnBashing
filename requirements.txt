@@ -1,3 +1,4 @@
 requests
+pysqlite3
 scrapy~=2.5.1
 pymongo~=3.12.3

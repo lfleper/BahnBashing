@@ -51,31 +51,50 @@ class Spider(scrapy.Spider):
         for connection in response.css('tbody.boxShadow.scheduledCon'):
             first_row = connection.css('tr.firstrow')
             second_row = connection.css('tr.last')
-            departure_station = first_row.css('td.station.first::text').get().strip()
-            arrival_station = second_row.css('td.station.stationDest::text').get().strip()
-            departure_time_raw = first_row.css('td.time::text').get().strip()
-            arrival_time_raw = second_row.css('td.time::text').get().strip()
-            duration_raw = first_row.css('td.duration.lastrow::text').get().strip()
-            num_changes = int(first_row.css('td.changes.lastrow::text').get().strip())
-            products = first_row.css('td.products.lastrow::text').get().strip()
-            capacity = first_row.css('td.center.lastrow').css('img::attr(title)').get().strip()
-            first_price = float(first_row.css('td.farePep').css('span.fareOutput::text').get().strip()
-                              .split(u'\xa0')[0].replace(",", "."))
 
-            second_price = float(first_row.css('td.fareStd').css('span.fareOutput::text').get().strip()
-                               .split(u'\xa0')[0].replace(",", "."))
-            price = min(first_price, second_price)
+            departure_station = self.strip_if_not_none(first_row.css('td.station.first::text').get())
+            arrival_station = self.strip_if_not_none(second_row.css('td.station.stationDest::text').get())
+            departure_time_raw = self.strip_if_not_none(first_row.css('td.time::text').get())
+            arrival_time_raw = self.strip_if_not_none(second_row.css('td.time::text').get())
+            duration_raw = self.strip_if_not_none(first_row.css('td.duration.lastrow::text').get())
 
-            departure_time_result = departure_time_raw.split(":")
-            departure_time = req_date.replace(hour=int(departure_time_result[0]), minute=int(departure_time_result[1]))
-            arrival_time_result = arrival_time_raw.split(":")
-            arrival_time = req_date.replace(hour=int(arrival_time_result[0]), minute=int(arrival_time_result[1]))
+            num_changes = first_row.css('td.changes.lastrow::text').get()
+            if num_changes is not None:
+                num_changes = int(num_changes.strip())
 
-            duration_result = duration_raw.split(":")
-            duration = int(duration_result[0]) * 60 + int(duration_result[1])
+            products = self.strip_if_not_none(first_row.css('td.products.lastrow::text').get())
+            capacity = self.strip_if_not_none(first_row.css('td.center.lastrow').css('img::attr(title)').get())
+
+            first_price = first_row.css('td.farePep').css('span.fareOutput::text').get()
+            if first_price is not None:
+                first_price = float(first_price.strip().split(u'\xa0')[0].replace(",", "."))
+
+            second_price = first_row.css('td.fareStd').css('span.fareOutput::text').get()
+            if second_price is not None:
+                second_price = float(second_price.strip().split(u'\xa0')[0].replace(",", "."))
+
+            price = None
+            if first_price is not None and second_price is not None:
+                price = min(first_price, second_price)
+
+            departure_time = None
+            if departure_time_raw is not None and departure_time_raw != "":
+                departure_time_result = departure_time_raw.split(":")
+                departure_time = req_date.replace(hour=int(departure_time_result[0]), minute=int(departure_time_result[1]))
+
+            arrival_time = None
+            if arrival_time_raw is not None and arrival_time_raw != "":
+                arrival_time_result = arrival_time_raw.split(":")
+                arrival_time = req_date.replace(hour=int(arrival_time_result[0]), minute=int(arrival_time_result[1]))
+
+            duration = None
+            if duration_raw is not None and duration_raw != "":
+                duration_result = duration_raw.split(":")
+                duration = int(duration_result[0]) * 60 + int(duration_result[1])
 
             yield {
                 'route_id': int(route_id),
+                'req_date': req_date,
                 'departure_station': departure_station,
                 'departure_time': departure_time,
                 'arrival_station': arrival_station,
@@ -86,3 +105,8 @@ class Spider(scrapy.Spider):
                 'products': products,
                 'capacity': capacity
             }
+    @staticmethod
+    def strip_if_not_none(text):
+        if text is not None:
+            return text.strip()
+        return None
