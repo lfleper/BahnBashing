@@ -1,9 +1,12 @@
-1,Iserlohn,Dortmund
-2,Köln,Berlin
-3,München,Hamburg,Uhrzeiten....
-
-
-78923456sdf23423g, Iserlohn, Dortmund, ID_ROUTE, REQUEST_TIMESTAMP, PRODUCTS, NUM_CHANGES, DURATION, DEPATURE_PLATFORM, CAPATCITY, PRICE
-
-Extra Tabelle Fahrtverlauf -> START,DESTINATION,ARRIVAL,DEPARTURE,START_PLATFORM,END_PLATFORM, PRODUCTS,CAPACITY
-
+1,Kiel+Hbf,Basel+SBB,7:13
+2,Kiel+Hbf,Basel+SBB,0:05
+3,Kiel+Hbf,Basel+SBB,15:00
+4,Dortmund+Hbf,München+Hbf,02:30
+5,Dortmund+Hbf,München+Hbf,10:00
+6,Dortmund+Hbf,München+Hbf,17:00
+7,Berlin+Hbf,München+Hbf,06:28
+8,Berlin+Hbf,München+Hbf,14:28
+9,Berlin+Hbf,München+Hbf,17:34
+10,Bredelar,Heidelberg+Hbf,6:38
+11,Bredelar,Heidelberg+Hbf,13:49
+12,Bredelar,Heidelberg+Hbf,17:49
