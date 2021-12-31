@@ -62,7 +62,7 @@ class Spider(scrapy.Spider):
             if num_changes is not None:
                 num_changes = int(num_changes.strip())
 
-            products = self.strip_if_not_none(first_row.css('td.products.lastrow::text').get())
+            products = self.strip_if_not_none(first_row.css('td.products.lastrow::text').extract()[-1])
 
             capacity = self.strip_if_not_none(first_row.css('td.center.lastrow').css('img::attr(title)').get())
             if capacity is not None:
@@ -85,10 +85,13 @@ class Spider(scrapy.Spider):
                 departure_time_result = departure_time_raw.split(":")
                 departure_time = req_date.replace(hour=int(departure_time_result[0]), minute=int(departure_time_result[1]))
 
+            additionalDay = self.strip_if_not_none(connection.css('td.time.dateChange::text').get())
             arrival_time = None
             if arrival_time_raw is not None and arrival_time_raw != "":
                 arrival_time_result = arrival_time_raw.split(":")
                 arrival_time = req_date.replace(hour=int(arrival_time_result[0]), minute=int(arrival_time_result[1]))
+                if additionalDay is not None and additionalDay.replace('\n', ' ') == "+ 1 Tag":
+                    arrival_time += timedelta(days=1)
 
             duration = None
             if duration_raw is not None and duration_raw != "":
