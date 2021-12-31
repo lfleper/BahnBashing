@@ -66,7 +66,7 @@ class Spider(scrapy.Spider):
 
             capacity = self.strip_if_not_none(first_row.css('td.center.lastrow').css('img::attr(title)').get())
             if capacity is not None:
-                capacity.replace(u'\xa0', ' ')
+                capacity = capacity.replace(u'\xa0', ' ')
 
             first_price = first_row.css('td.farePep').css('span.fareOutput::text').get()
             if first_price is not None:
