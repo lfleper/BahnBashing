@@ -63,7 +63,10 @@ class Spider(scrapy.Spider):
                 num_changes = int(num_changes.strip())
 
             products = self.strip_if_not_none(first_row.css('td.products.lastrow::text').get())
+
             capacity = self.strip_if_not_none(first_row.css('td.center.lastrow').css('img::attr(title)').get())
+            if capacity is not None:
+                capacity.replace(u'\xa0', ' ')
 
             first_price = first_row.css('td.farePep').css('span.fareOutput::text').get()
             if first_price is not None:
