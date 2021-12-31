@@ -94,7 +94,7 @@ class Spider(scrapy.Spider):
 
             yield {
                 'route_id': int(route_id),
-                'req_date': req_date,
+                'req_date': datetime.now(),
                 'departure_station': departure_station,
                 'departure_time': departure_time,
                 'arrival_station': arrival_station,
@@ -103,7 +103,8 @@ class Spider(scrapy.Spider):
                 'duration': duration,
                 'num_changes': num_changes,
                 'products': products,
-                'capacity': capacity
+                'capacity': capacity,
+                'url': response.request.url
             }
     @staticmethod
     def strip_if_not_none(text):
