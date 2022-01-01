@@ -23,6 +23,7 @@ class Spider(scrapy.Spider):
             for row in reader:
                 yield row[0], row[1], row[2], row[3]
 
+
     def start_requests(self):
         requests = []
         for data in Spider.get_data():
