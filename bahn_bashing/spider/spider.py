@@ -78,7 +78,11 @@ class Spider(scrapy.Spider):
                 second_price = float(second_price.strip().split(u'\xa0')[0].replace(",", "."))
 
             price = None
-            if first_price is not None and second_price is not None:
+            if first_price is not None and second_price is None:
+                price = first_price
+            elif second_price is not None and first_price is None:
+                price = second_price
+            elif first_price is not None and second_price is not None:
                 price = min(first_price, second_price)
 
             departure_time = None
