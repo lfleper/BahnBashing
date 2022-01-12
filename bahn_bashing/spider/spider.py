@@ -111,6 +111,8 @@ class Spider(scrapy.Spider):
                 'arrival_station': arrival_station,
                 'arrival_time': arrival_time,
                 'price': price,
+                'first_price': first_price,
+                'second_price': second_price,
                 'duration': duration,
                 'num_changes': num_changes,
                 'products': products,
